@@ -1,0 +1,51 @@
+const baseBet = 100 //base bet (in satoshis, 100 satoshi = 1 bit)
+const baseTarget = 2 //What multiplier you're trying to achieve 100 = 100x
+const maxRolls = 90 //max games the bot will play if infiniteRolls = false
+const infiniteRolls = true //Infinite rolls is true then ignore maxRolls
+const lossStreakDoubleDown = 2 //bet will increase bet if hits this many losses consecutively
+const pausePerBetMilliseconds   = 100     // Slow script in milliseconds if need
+ 
+let target = baseTarget //initialize multiplier as base
+let currentBet = baseBet //initialize currentBet as baseBet (only increase on consecutive loss)
+let betCount = 0 //bet count if using max rolls upon start of script
+let lossStreak = 26 //loss streak upon start of script
+let consecutiveLoss = 0 // setting consecutive losses upon start of script
+let endScript = 26 // End the script if we hit 90 consecutive losses
+ 
+while (betCount < maxRolls || infiniteRolls) {
+ 
+//quit the script if we hit the limit! <--------------ADD THIS
+if (consecutiveLoss >= endScript){
+    baseBet = 0
+}
+ 
+function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
+
+const {multiplier} = await this.bet(currentBet, target)
+ 
+if (multiplier < target) {
+ 
+this.log('Consecutive Losses: ' + consecutiveLoss)
+lossStreak++
+consecutiveLoss++
+ 
+ 
+if (lossStreak == lossStreakDoubleDown) {
+currentBet = Math.round((currentBet * 2) / 100) * 100 //Bet multiplier on Consecutive losses (see notes)
+lossStreak = 0
+}
+ 
+} else {
+ 
+target = baseTarget
+this.log(`Win.`)
+lossStreak = 0
+currentBet = baseBet
+consecutiveLoss = 0
+}
+ 
+betCount++
+
+if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
+
+}
