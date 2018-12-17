@@ -1,7 +1,7 @@
 const basebet = 1 //bits
 const cashOut = 7 //multiplier
 const GoUpAfterXLost = 1.0
-const pausePerBetMilliseconds   = 500      // Slow script in milliseconds if need
+const pausePerBetMilliseconds   = 2000      // Slow script in milliseconds if need
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 
