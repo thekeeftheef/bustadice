@@ -1,10 +1,11 @@
 const baseBet = 100
 const baseTarget = 5
-const increaseAfterX = 10
-const targetIncrease = 1.21
-const increaseBy = 5
+const increaseAfterX = 5
+const targetIncrease = 1
+const increaseBy = 1
 const decoyTarget = 5
-const waitForXunderTarget = 20
+const waitForXunderTarget = 10
+const pausePerBetMilliseconds   = 750      // Slow script in milliseconds if need
 
 
 let consecutiveLosses = 0
@@ -13,6 +14,8 @@ let target = baseTarget
 let redStreak = 0  
 
 while (true) {
+    if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
+
     const { multiplier } = await this.skip(bet, target)
     
     if (multiplier < decoyTarget) {
@@ -23,6 +26,8 @@ while (true) {
     }
     
     while(redStreak >= waitForXunderTarget) {
+    if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
+
         this.log(`Red streak hit on skips, starting betting.`)
         const { multiplier } = await this.bet(bet, target)
         await sleep(0)
