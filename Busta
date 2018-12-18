@@ -1,0 +1,55 @@
+const baseBet = 100
+const baseTarget = 31
+const increaseAfterX = 40
+const targetIncrease = 1.21
+const increaseBy = 10
+const decoyTarget = 100
+const waitForXunderTarget = 100
+
+
+let consecutiveLosses = 0
+let bet = baseBet
+let target = baseTarget
+let redStreak = 0
+
+while (true) {
+    const { multiplier } = await this.skip(bet, target)
+    
+    if (multiplier < decoyTarget) {
+        redStreak++
+        await this.log(`Under decoy #${redStreak}`)
+    } else {
+        redStreak = 0
+    }
+    
+    while(redStreak >= waitForXunderTarget) {
+        this.log(`Red streak hit on skips, starting betting.`)
+        const { multiplier } = await this.bet(bet, target)
+        await sleep(0)
+
+        if (multiplier < target) { // loss
+            consecutiveLosses++
+            redStreak++
+            await this.log(`Lost consecutive bet #${consecutiveLosses}`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            if (consecutiveLosses % increaseAfterX === 0) {
+                bet *= increaseBy
+                target = baseTarget
+            } else {
+                target += targetIncrease
+            }
+
+        } else { // win
+            redStreak = 0
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log("Won bet")
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        }
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
