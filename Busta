@@ -1,6 +1,6 @@
 const baseBet = 100
-const baseTarget = 31
-const increaseAfterX = 40
+const baseTarget = 5
+const increaseAfterX = 10
 const targetIncrease = 1.21
 const increaseBy = 10
 const decoyTarget = 100
@@ -10,7 +10,7 @@ const waitForXunderTarget = 100
 let consecutiveLosses = 0
 let bet = baseBet
 let target = baseTarget
-let redStreak = 0
+let redStreak = 0  
 
 while (true) {
     const { multiplier } = await this.skip(bet, target)
