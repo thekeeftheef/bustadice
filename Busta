@@ -2,9 +2,9 @@ const baseBet = 100
 const baseTarget = 5
 const increaseAfterX = 10
 const targetIncrease = 1.21
-const increaseBy = 10
-const decoyTarget = 100
-const waitForXunderTarget = 100
+const increaseBy = 5
+const decoyTarget = 5
+const waitForXunderTarget = 20
 
 
 let consecutiveLosses = 0
