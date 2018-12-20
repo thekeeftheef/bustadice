@@ -1,10 +1,10 @@
-const baseBet = 1000
+const baseBet = 1500
 const baseTarget = 2
 const increaseAfterX = 1
 const targetIncrease = 1
 const increaseBy = 2
 const decoyTarget = 2
-const waitForXunderTarget = 2
+const waitForXunderTarget = 4
 const pausePerBetMilliseconds   = 1000      // Slow script in milliseconds if need
 
 
