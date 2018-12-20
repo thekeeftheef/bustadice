@@ -1,11 +1,11 @@
-const baseBet = 100
-const baseTarget = 5
-const increaseAfterX = 5
+const baseBet = 1000
+const baseTarget = 2
+const increaseAfterX = 1
 const targetIncrease = 1
-const increaseBy = 1
-const decoyTarget = 5
-const waitForXunderTarget = 10
-const pausePerBetMilliseconds   = 750      // Slow script in milliseconds if need
+const increaseBy = 2
+const decoyTarget = 2
+const waitForXunderTarget = 2
+const pausePerBetMilliseconds   = 1000      // Slow script in milliseconds if need
 
 
 let consecutiveLosses = 0
