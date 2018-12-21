@@ -54,7 +54,7 @@ if (consecutiveLosses >= endScript){
             consecutiveLosses = 0
             bet = baseBet
             target = baseTarget
-            await this.log("Dead Run...Restarting")
+            await this.log("Dead Run, Restarting Decoy...")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
         } else { // win
