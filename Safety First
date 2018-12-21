@@ -1,32 +1,38 @@
-const baseBet = 1500
+const baseBet = 500
 const baseTarget = 2
 const increaseAfterX = 1
 const targetIncrease = 1
 const increaseBy = 2
 const decoyTarget = 2
-const waitForXunderTarget = 4
+const waitForXunderTarget = 2
 const pausePerBetMilliseconds   = 1000      // Slow script in milliseconds if need
 
 
-let consecutiveLosses = 0
+let consecutiveLosses = 1
+let endScript = 3 // End the script if we hit (X) consecutive losses
 let bet = baseBet
 let target = baseTarget
 let redStreak = 0  
 
+
 while (true) {
+
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
 
     const { multiplier } = await this.skip(bet, target)
     
     if (multiplier < decoyTarget) {
         redStreak++
-        await this.log(`Under decoy #${redStreak}`)
+        await this.log(`Under Skip #${redStreak}`)
     } else {
         redStreak = 0
     }
-    
+
+
     while(redStreak >= waitForXunderTarget) {
+
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
+
 
         this.log(`Red streak hit on skips, starting betting.`)
         const { multiplier } = await this.bet(bet, target)
@@ -37,12 +43,23 @@ while (true) {
             redStreak++
             await this.log(`Lost consecutive bet #${consecutiveLosses}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            if (consecutiveLosses % increaseAfterX === 0) {
+            if (consecutiveLosses % increaseAfterX === 1) {
                 bet *= increaseBy
                 target = baseTarget
             } else {
                 target += targetIncrease
-            }
+}
+
+//quit the script if we hit the limit! <--------------ADD THIS
+if (consecutiveLosses >= endScript){
+    redStreak = 0
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log("Dead Run...Restarting")
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        }
+
 
         } else { // win
             redStreak = 0
@@ -52,6 +69,8 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             await this.log("Won bet")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
+
+
     }
 }
 
