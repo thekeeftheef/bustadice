@@ -1,0 +1,73 @@
+const baseBet = 100     // Starting Bet
+const baseTarget = 1.2     // Starting Multiplier
+const increaseAfterX = 1     // Increase after X
+const targetIncrease = 1.2     // + Add to Target
+const increaseBy = 1     // Multiply Bet By
+const decoyTarget = 2     // Decoy Target
+const waitForXunderTarget = 2     
+const pausePerBetMilliseconds   = 1000     // Slow script in milliseconds
+
+
+let consecutiveLosses = 1
+let endScript = 10 // End the script if we hit (X) consecutive losses
+let bet = baseBet
+let target = baseTarget
+let redStreak = 0  
+
+
+while (true) {
+    if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}        
+
+    const { multiplier } = await this.skip(bet, target)
+    
+    if (multiplier < decoyTarget) {
+        redStreak++
+        await this.log(`Decoy Skip #${redStreak}`)
+    } else {
+        redStreak = 0
+    }
+
+
+    while(redStreak >= waitForXunderTarget) {
+    if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
+
+
+        this.log(`Streak Hit, Live Betting....`)
+        const { multiplier } = await this.bet(bet, target)
+        await sleep(0)
+
+        if (multiplier < target) { // loss
+            consecutiveLosses++
+            redStreak++
+            await this.log(`Loss #${consecutiveLosses}`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            if (consecutiveLosses % increaseAfterX === 1) {
+                bet *= increaseBy
+                target = baseTarget
+            } else {
+                target += targetIncrease
+}
+
+//quit the script if we hit the limit! <--------------ADD THIS
+if (consecutiveLosses >= endScript){
+    redStreak = 0
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log("Dead Run, Restarting Decoy...")
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        }
+        } else { // win
+            redStreak = 0
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log("Won bet")
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        }
+    }
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
