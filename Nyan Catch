@@ -1,0 +1,207 @@
+const baseBet                    = 2    /* Default: 25, more you set, more you get  */
+const cycles_for_actual_gameBase = 33   /* Should be: streakToWaitBase + 5(safe), the more you set it, the longer it will play  */
+const streakToWaitBase           = 30   /* Should not touch this */
+const divisions                  = 2    /* 1, 3 */
+const toFind                     = 5    /* Default: 5x 8x       */
+const multiplierBet              = 1.26 /* Default: 1.26, 1.13 edge of profit  */
+const streakToStartTrack         = 8    /* Default 3, 5, 8           */
+const actual_game_pause_in_MS    = 0   /* Slow down while game begins */
+const foundedAdditional          = 6
+const nyan_stopper = false
+const changeSeedAfterGame    = false
+const stopAtCatch            = true
+const afterCatchContinuePlay = false
+const skip_after_bet         = 3
+const stopLoss               = 0
+const baseDivideToFindBy     = 2
+const divideTarget           = false
+const engine = this
+let bet = baseBet
+let streakToWait = streakToWaitBase   /* 4    */
+let cycles_for_actual_game = cycles_for_actual_gameBase
+let divideToFindBy = baseDivideToFindBy
+let rolls = 0
+let lossCount = 0
+let currentBet = baseBet * 100
+let foundedChains
+let chains = []
+let chain_numbers = []
+let nyan_numbers = []
+let nyan_rollls_collection = []
+let nyans = 0
+let nyan_rolls = 0
+let stable = true
+let net_profit = 0
+let addToFind = toFind
+var multiplier
+let counts
+let countsbase
+doCalc()
+while (lossCount <= streakToWait) {
+    await check_conditions()
+    rolls++
+   
+    var{ multiplier}  = await engine.bet(100, 1.01)
+    await Nyan_hunt()
+ 
+    if (multiplier < toFind){
+        lossCount++
+        chain_numbers.push(multiplier)
+    }else{
+        if(lossCount > streakToStartTrack) {
+            foundedChains = lossCount
+            chains.push(foundedChains)
+            this.log(`Chain of: ${foundedChains}`)
+            streakToWait = foundedChains + foundedAdditional
+            cycles_for_actual_game = streakToWait +( toFind * divisions)
+ 
+            this.log(`${chain_numbers}x `)
+            this.log(`stw: ${streakToWait}, cycles: ${cycles_for_actual_game} `)
+        }
+        chain_numbers = []
+        lossCount = 0
+    }
+    if(lossCount == streakToWait){
+        this.log(`${streakToWait} streaks just have been past by now. `)
+        this.log(`${chains} < chains of ${rolls} rolls. `)
+        play_gong()
+        if(afterCatchContinuePlay == true){
+            if(stable == false){
+                //streakToWait++
+                //cycles_for_actual_game++
+                //engine.log(`Streak at ${streakToWait}`)
+                //bet = bet + 3
+            }else{
+                //streakToWait = streakToWaitBase
+                //cycles_for_actual_game = cycles_for_actual_gameBase
+                //engine.log(`Streak at base.`)
+                //bet = baseBet
+            }
+            await DoBets()
+            await GameEnded()
+        }  
+    }
+}
+async function DoBets(){
+    for(let i = 0; i <= cycles_for_actual_game - streakToWait; i++){
+        lossCount = 0
+        if (actual_game_pause_in_MS != 0){await sleep(actual_game_pause_in_MS)}
+        let toFindFinal = toFind //+ addToFind
+        if (divideTarget == true){
+            toFindFinal = toFindFinal / divideToFindBy
+        }
+        await check_conditions()
+        var{multiplier} = await engine.bet(Math.round(currentBet/100)*100, toFindFinal)
+ 
+        if(multiplier > toFindFinal){
+            net_profit = net_profit + ((Math.round(currentBet / 100) * 100 ) * toFindFinal)
+            stable = true
+            engine.log(`You profit for last run is: ${Math.round(net_profit/100)}`)
+            net_profit = 0
+            counts = countsbase
+            return
+        }else {
+            net_profit = net_profit - Math.round(currentBet / 100) * 100
+            stable = false
+           
+        }
+ 
+        if (multiplier < toFind){
+            currentBet = currentBet * multiplierBet
+            if (multiplier > toFind / divideToFindBy){
+                divideToFindBy = divideToFindBy - 1
+            } else {
+                divideToFindBy = divideToFindBy + 1
+            }
+            if (divideToFindBy > 10 || divideToFindBy <= 1){
+                divideToFindBy = baseDivideToFindBy
+            }
+   
+        }else{
+            GameEnded_wins()
+            if (stopAtCatch == true){
+                await this.stop()
+            }
+   
+            i = i + cycles_for_actual_game
+        }
+        if (multiplier < toFindFinal && i >= cycles_for_actual_game - streakToWait){
+            await GameEnded()
+            addToFind++
+        }else{
+           
+        }
+    }
+ 
+}
+async function GameEnded_wins(){
+    currentBet = bet * 100
+    addToFind = 0
+}
+async function GameEnded(){
+    currentBet = bet * 100
+    addToFind = addToFind + 2
+    try {
+        if(changeSeedAfterGame == true){
+            await generateSeed()  
+        }
+    } catch (error) {
+        engine.log("OLD SEED IS NOT USED")
+    }
+}
+async function GameEnded_lost(){
+    if (changeSeedAfterGame == true){
+     //   await generateSeed()
+    }
+}
+async function check_conditions(){
+    if (stopLoss > engine.balance / 100){
+        await engine.stop()
+    }
+}
+async function Nyan_hunt(){
+    if (multiplier >= 1000){
+        nyans++
+        nyan_numbers.push(multiplier)
+        nyan_rolls = rolls
+        nyan_rollls_collection .push(rolls)
+        engine.log (`${nyan_rolls} was rolled before nyan.`)
+        engine.log(`Nyan Alert! ==> ${multiplier}x on ${rolls} roll`)
+        engine.log(`Total nyans was found ${nyans}, Nyans: ${nyan_numbers}`)
+        play_gong()
+        if (nyan_stopper == true){
+            await engine.stop()
+        }
+    }
+}
+function doCalc(){
+    if (afterCatchContinuePlay == true){
+        for (let i = 0; i < cycles_for_actual_game - streakToWait; i++){
+            currentBet = Math.round(currentBet * multiplierBet)
+        }
+    engine.log(`Actual ${Math.round(currentBet/100)} in total will be placed in one run.`)
+    currentBet = bet * 100
+    }
+}
+function play_gong() {
+    const audio = new Audio("https://bustadice.com/5bb187b7ef764e76fb519939f77288c1.mp3")
+    audio.play()
+    return new Promise(resolve => audio.onended = resolve)
+}
+async function sleep(ms){return new Promise(resolve => setTimeout(resolve, ms))}
+async function generateSeed(){
+    const { server_seed_hash } = await engine.newSeedPair()
+    try {
+        const clientSeed = randomSeed()
+        await engine.setClientSeed(clientSeed)
+    }
+    catch(e){
+       engine.log(e)
+    }
+}
+function randomSeed(){
+    const words = ['Alesgra ','Brasvon ','Chasrlik ','Dselago ','Zescho ','Forsextromb ','Hotselka ','Gnsomus ','Addiscted ','Aureslia ','Zsigalo ','Wivesrma ',
+    'Masriner ','Octobersfest ','Nasscar ','Papajsa ','Albserts ','Gomuss ','Fiesrra ','GsTO ','sUnicorn ','Vicanstus ','Sisski ','Xasvier ','Posiuplet ','Antustulika ']
+ 
+    return words[Math.floor(words.length * Math.random())] + words[Math.floor(words.length * Math.random())] + words[Math.floor(words.length * Math.random())]
+}
