@@ -1,9 +1,9 @@
-const baseBet = 200     // Starting Bet
-const baseTarget = 2     // Starting Multiplier
-const increaseAfterX = 1     // Increase after X
-const targetIncrease = 0     // + Add to Target
-const increaseBy = 2     // Multiply Bet By
-const decoyTarget = 2     // Decoy Target
+const baseBet = 200                        // Starting Bet
+const baseTarget = 2                       // Starting Multiplier
+const increaseAfterX = 1                   // Increase after X
+const targetIncrease = 0                   // + Add to Target
+const increaseBy = 2                       // Multiply Bet By
+const decoyTarget = 2                      // Decoy Target
 const waitForXunderTarget = 3
 const pausePerBetMilliseconds   = 1000     // Slow script in milliseconds
 
@@ -17,19 +17,15 @@ let redStreak = 0
 
 while (true) {        
     const { multiplier } = await this.skip(bet, target)
-    
     if (multiplier < decoyTarget) {
         redStreak++
         await this.log(`Decoy Skip #${redStreak}`)
     } else {
         redStreak = 0
     }
-    
+   
     while(redStreak >= waitForXunderTarget) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
-
-
-        this.log(`Streak Hit, Live Betting....`)
         const { multiplier } = await this.bet(bet, target)
         await sleep(0)
 
