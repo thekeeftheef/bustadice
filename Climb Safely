@@ -28,8 +28,6 @@ while (true) {
     while(redStreak >= waitForXunderTarget) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
 
-
-        this.log(`Streak Hit, Live Betting....`)
         const { multiplier } = await this.bet(bet, target)
         await sleep(0)
 
