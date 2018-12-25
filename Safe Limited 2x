@@ -37,7 +37,6 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
                 bet *= increaseBy
                 target += targetIncrease
-                target = baseTarget
             }
 //quit the script if we hit the limit! <--------------ADD THIS
 if (consecutiveLosses >= endScript){
