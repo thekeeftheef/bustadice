@@ -34,6 +34,8 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
                 target += targetIncrease
 }
 
+
+
 //restart the script if we hit the limit! <--------------ADD THIS
 if (consecutiveLosses >= endScript){
     redStreak = 0
@@ -43,6 +45,9 @@ if (consecutiveLosses >= endScript){
             await this.log("Dead Run, Restarting Decoy...")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
+        
+        
+        
         } else { // win
             redStreak = 0
             consecutiveLosses = 0
@@ -53,6 +58,8 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
     }
 }
+
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
