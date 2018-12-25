@@ -10,7 +10,7 @@ const pausePerBetMilliseconds =      50     // Slow script in milliseconds
 
 
 let consecutiveLosses =     0
-let endScript =     1000                    // End the script if we hit (X) consecutive losses
+let endScript =     250                     // End the script if we hit (X) consecutive losses
 let bet =     baseBet
 let target =     baseTarget
 let redStreak =     0  
