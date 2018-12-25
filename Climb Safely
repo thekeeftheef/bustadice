@@ -1,23 +1,24 @@
-const baseBet = 100     // Starting Bet
-const baseTarget = 1.1     // Starting Multiplier
-const increaseAfterX = 1     // Increase after X
-const targetIncrease = 1.1    // + Add to Target
-const increaseBy = 1     // Multiply Bet By
-const decoyTarget = 0     // Decoy Target
-const waitForXunderTarget = 0
-const pausePerBetMilliseconds   = 50     // Slow script in milliseconds
+const baseBet =     100                     // Starting Bet
+const baseTarget =     1.1                  // Starting Multiplier
+const increaseAfterX =     1                // Increase after X
+const targetIncrease =     1.1              // + Add to Target
+const increaseBy =     1                    // Multiply Bet By
+const decoyTarget =     0                   // Decoy Target
+const waitForXunderTarget =     0
+const pausePerBetMilliseconds =      50     // Slow script in milliseconds
 
 
-let consecutiveLosses = 0
-let endScript = 1000 // End the script if we hit (X) consecutive losses
-let bet = baseBet
-let target = baseTarget
-let redStreak = 0  
+
+let consecutiveLosses =     0
+let endScript =     1000                    // End the script if we hit (X) consecutive losses
+let bet =     baseBet
+let target =     baseTarget
+let redStreak =     0  
+
 
 
 while (true) {        
     const { multiplier } = await this.skip(bet, target)
-    
     if (multiplier < decoyTarget) {
         redStreak++
         await this.log(`Decoy Skip #${redStreak}`)
@@ -25,13 +26,13 @@ while (true) {
         redStreak = 0
     }
     
-    while(redStreak >= waitForXunderTarget) {
+while(redStreak >= waitForXunderTarget) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
-
+    
         const { multiplier } = await this.bet(bet, target)
         await sleep(0)
 
-        if (multiplier < target) { // loss
+    if (multiplier < target) { // loss
             consecutiveLosses++
             redStreak++
             await this.log(`Loss #${consecutiveLosses}`)
