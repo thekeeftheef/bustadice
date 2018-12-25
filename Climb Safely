@@ -36,14 +36,13 @@ while (true) {
             redStreak++
             await this.log(`Loss #${consecutiveLosses}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            if (consecutiveLosses % increaseAfterX === 1) {
+            if (consecutiveLosses % increaseAfterX === 0) {
                 bet *= increaseBy
                 target = baseTarget
-            } else {
                 target += targetIncrease
 }
 
-//quit the script if we hit the limit! <--------------ADD THIS
+//restart the script if we hit the limit! <--------------ADD THIS
 if (consecutiveLosses >= endScript){
     redStreak = 0
             consecutiveLosses = 0
