@@ -4,7 +4,7 @@ const increaseAfterX =     1                // Increase after X
 const targetIncrease =     1.25                // + Add to Target
 const increaseBy =     1                    // Multiply Bet By
 const pausePerBetMilliseconds =      1000     // Slow script in milliseconds
-const waitForXunderTarget = 2
+const waitForXunderTarget = 0
 
 
 
