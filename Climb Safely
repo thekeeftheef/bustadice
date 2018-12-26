@@ -1,15 +1,15 @@
 const baseBet =     100                     // Starting Bet
 const baseTarget =     2                    // Starting Multiplier
 const increaseAfterX =     1                // Increase after X
-const targetIncrease =     1.25                // + Add to Target
+const targetIncrease =     2                // + Add to Target
 const increaseBy =     1                    // Multiply Bet By
-const pausePerBetMilliseconds =      1000     // Slow script in milliseconds
+const pausePerBetMilliseconds =      100     // Slow script in milliseconds
 const waitForXunderTarget = 0
 
 
 
 let consecutiveLosses =     0
-let endScript =     250                     // End the script if we hit (X) consecutive losses
+let endScript =     100                     // End the script if we hit (X) consecutive losses
 let bet =     baseBet
 let target =     baseTarget
 let redStreak =     0  
