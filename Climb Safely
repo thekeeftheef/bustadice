@@ -1,18 +1,18 @@
-const baseBet =     100                     // Starting Bet in Satoshi (100 satoshi = 1 bit)
-const baseTarget =     2                    // Starting Multiplier
-const increaseAfterX =     1                // Increase after X
-const targetIncrease =     2                // + Add to Target
-const increaseBy =     1                    // Multiply Bet By
-const pausePerBetMilliseconds =      50     // Slow script in milliseconds
-const lossStreakDoubleDown =      5        //bet will increase bet if hits this many losses consecutively
+const baseBet                       = 100             // Starting Bet in Satoshi (100 satoshi = 1 bit)
+const baseTarget                    = 2               // Starting Multiplier
+const increaseAfterX                = 1               // Increase after X
+const targetIncrease                = 2               // + Add to Target
+const increaseBy                    = 1               // Multiply Bet By
+const pausePerBetMilliseconds       = 50              // Slow script in milliseconds
+const lossStreakDoubleDown          = 5               //bet will increase bet if hits this many losses consecutively
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
-let consecutiveLosses =     0
-let endScript =     10                     // End the script if we hit (X) consecutive losses
-let bet =     baseBet
-let target =     baseTarget
-let lossStreak = 0
+let consecutiveLosses               = 0
+let endScript                       = 10              // End the script if we hit (X) consecutive losses
+let bet                             = baseBet
+let target                          = baseTarget
+let lossStreak                      = 0
 
 
 
