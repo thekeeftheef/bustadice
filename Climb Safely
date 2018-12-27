@@ -4,11 +4,12 @@ const increaseAfterX =     1                // Increase after X
 const targetIncrease =     2                // + Add to Target
 const increaseBy =     1                    // Multiply Bet By
 const pausePerBetMilliseconds =      50     // Slow script in milliseconds
+const lossStreakDoubleDown =      5        //bet will increase bet if hits this many losses consecutively
 
 
-
+function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 let consecutiveLosses =     0
-let endScript =     25                     // End the script if we hit (X) consecutive losses
+let endScript =     10                     // End the script if we hit (X) consecutive losses
 let bet =     baseBet
 let target =     baseTarget
 let lossStreak = 0
@@ -30,10 +31,13 @@ while (true) {
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
                 bet *= increaseBy
-                target += targetIncrease               
+                target += targetIncrease    
+            } 
+            if (lossStreak == lossStreakDoubleDown) {
+            bet = Math.round((bet * 2) / 100) * 100                             //Bet multiplier on Consecutive losses (see notes)
+            lossStreak = 0
 }
-
-
+          
 
 if (consecutiveLosses >= endScript){
             lossStreak = 0
@@ -56,8 +60,4 @@ if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*10)}
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*10)} 
         }
-    
-}
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
 }
