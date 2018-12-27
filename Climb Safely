@@ -15,7 +15,6 @@ let target                          = baseTarget
 let lossStreak                      = 0
 
 
-
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
 
 
