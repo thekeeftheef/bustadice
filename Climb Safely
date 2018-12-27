@@ -3,28 +3,29 @@ const baseTarget =     2                    // Starting Multiplier
 const increaseAfterX =     1                // Increase after X
 const targetIncrease =     2                // + Add to Target
 const increaseBy =     1                    // Multiply Bet By
-const pausePerBetMilliseconds =      100     // Slow script in milliseconds
-const waitForXunderTarget = 0
+const pausePerBetMilliseconds =      250     // Slow script in milliseconds
 
 
 
 let consecutiveLosses =     0
-let endScript =     100                     // End the script if we hit (X) consecutive losses
+let endScript =     25                     // End the script if we hit (X) consecutive losses
 let bet =     baseBet
 let target =     baseTarget
-let redStreak =     0  
+let lossStreak =     0  
 
 
 
-while(redStreak >= waitForXunderTarget) {
+this.log(`Beginning Script | Base Bet = ${baseBet/100} Bit.`)
+
+
+while (true) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
-    
-        const { multiplier } = await this.bet(bet, target)
-        await sleep(0)
+            const { multiplier } = await this.bet(bet, target)
+            await sleep(0)
 
     if (multiplier < target) { // loss
             consecutiveLosses++
-            redStreak++
+            lossStreak++
             await this.log(`Loss #${consecutiveLosses}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
@@ -33,21 +34,20 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
 
 
-
 //restart the script if we hit the limit! <--------------ADD THIS
 if (consecutiveLosses >= endScript){
-    redStreak = 0
+            lossStreak = 0
             consecutiveLosses = 0
             bet = baseBet
             target = baseTarget
             await this.log("Dead Run...")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
-        
+       
         
         
         } else { // win
-            redStreak = 0
+            lossStreak = 0
             consecutiveLosses = 0
             bet = baseBet
             target = baseTarget
@@ -56,9 +56,6 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         }
     
 }
-
-
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
