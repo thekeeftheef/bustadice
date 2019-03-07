@@ -1,0 +1,25 @@
+const basebet = 1 //bits
+const cashOut = 7 //multiplier
+const GoUpAfterXLost = 1.0
+const pausePerBetMilliseconds   = 2000      // Slow script in milliseconds if need
+
+function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
+
+let lostcounter = 0
+let currentBet = basebet
+while (true) {
+    const { multiplier } = await this.bet(Math.round(currentBet)*100, cashOut)
+    if (multiplier < cashOut){
+        lostcounter += 1
+        if (lostcounter >= GoUpAfterXLost) {
+            currentBet *= 1.18
+            lostcounter = 0
+        }
+    }else{
+        currentBet = basebet
+        lostcounter = 0
+    }
+
+if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)}            // Slow down script if necessary.
+
+}
