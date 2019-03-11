@@ -1,14 +1,14 @@
 const baseBet                       = 100             // Starting Bet in Satoshi (100 satoshi = 1 bit)
-const baseTarget                    = 2               // Starting Multiplier
+const baseTarget                    = 1.1               // Starting Multiplier
 const increaseAfterX                = 1               // Increase after X
-const targetIncrease                = 2               // + Add to Target
 const increaseBy                    = 1               // Multiply Bet By
-const pausePerBetMilliseconds       = 50              // Slow script in milliseconds
+const pausePerBetMilliseconds       = 25              // Slow script in milliseconds
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
+let targetIncrease                  = baseTarget             // + Add to Target
 let consecutiveLosses               = 0
-let endScript                       = 10              // End the script if we hit (X) consecutive losses
+let endScript                       = 100              // End the script if we hit (X) consecutive losses
 let bet                             = baseBet
 let target                          = baseTarget
 let lossStreak                      = 0
@@ -39,7 +39,7 @@ if (consecutiveLosses >= endScript){
             target = baseTarget
             await this.log(`Limit Reached | Restarting Script With ${baseBet/100} Bit(s).`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*10)} 
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)} 
         }
        
         
@@ -51,6 +51,6 @@ if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*10)}
             target = baseTarget
             await this.log("Won Bet")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*10)} 
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*2)} 
         }
 }
