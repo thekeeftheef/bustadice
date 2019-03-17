@@ -1,0 +1,49 @@
+const baseBet                       = 100             // Starting Bet in Satoshi (100 satoshi = 1 bit)
+const baseTarget                    = 500               // Starting Multiplier
+const increaseAfterX                = 1               // Increase after X
+const increaseBy                    = 1               // Multiply Bet By
+const pausePerBetMilliseconds       = 500              // Slow script in milliseconds
+
+
+function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
+let targetIncrease                  = baseTarget             // + Add to Target
+let consecutiveLosses               = 0
+let endScript                       = (baseTarget / 2)             // End the script if we hit (X) consecutive losses
+let bet                             = baseBet
+let target                          = baseTarget
+
+
+this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
+
+
+while (true) {
+    if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
+            const { multiplier } = await this.bet(bet, target)
+            await sleep(0)
+
+    if (multiplier < target) { // loss
+            consecutiveLosses++
+            await this.log(`Loss #${consecutiveLosses}`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            if (consecutiveLosses % increaseAfterX === 0) {                
+            }   
+
+if (consecutiveLosses >= endScript){
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log(`Limit Reached | Restarting Script With ${baseBet/100} Bit(s).`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)} 
+        }
+              
+        
+        } else { // win
+            consecutiveLosses = 0
+            bet = baseBet
+            target = baseTarget
+            await this.log("Won Bet")
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*2)} 
+        }
+}
