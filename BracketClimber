@@ -1,4 +1,3 @@
-
 const baseBet                       = 100             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = 2               // Starting Multiplier
 const increaseAfterX                = 1               // Increase after X
