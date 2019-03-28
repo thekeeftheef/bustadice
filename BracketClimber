@@ -8,8 +8,8 @@ const pausePerBetMilliseconds       = 5              // Slow script in milliseco
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 let targetIncrease                  = baseTarget             // + Add to Target
 let consecutiveLosses               = 0
-let endScript                       = 50             // End the script if we hit (X) consecutive losses
-let scriptMulti                     = 1
+let endScript                       = 100             // End the script if we hit (X) consecutive losses
+let scriptMulti                     = 0.9
 let bet                             = baseBet
 let target                          = baseTarget
 let lossStreak                      = 0
@@ -37,7 +37,7 @@ if (consecutiveLosses >= endScript){
             lossStreak++
             consecutiveLosses = 0
             bet = baseBet
-            target = ((baseTarget + lossStreak) + ((endScript * scriptMulti) * lossStreak))
+            target = ((baseTarget + (lossStreak/2)) + ((endScript * scriptMulti) * lossStreak))
             await this.log(`Limit Reached | Restarting Script With ${baseBet/100} Bit(s) | Loss Streak: ${lossStreak}.`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds))} 
