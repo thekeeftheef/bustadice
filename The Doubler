@@ -2,7 +2,7 @@ const baseBet                       = 100             // Starting Bet in Satoshi
 const baseTarget                    = 500               // Starting Multiplier
 const increaseAfterX                = 1               // Increase after X
 const increaseBy                    = 1               // Multiply Bet By
-const pausePerBetMilliseconds       = 500              // Slow script in milliseconds
+const pausePerBetMilliseconds       = 5              // Slow script in milliseconds
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
@@ -34,7 +34,7 @@ if (consecutiveLosses >= endScript){
             target = baseTarget
             await this.log(`Limit Reached | Restarting Script With ${baseBet/100} Bit(s).`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)} 
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*100)} 
         }
               
         
@@ -44,6 +44,6 @@ if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)}
             target = baseTarget
             await this.log("Won Bet")
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*2)} 
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*200)} 
         }
 }
