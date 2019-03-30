@@ -1,17 +1,20 @@
 const baseBet                       = 100             // Starting Bet in Satoshi (100 satoshi = 1 bit)
-const baseTarget                    = 1.5               // Starting Multiplier
+const baseTarget                    = 1.15              // Starting Multiplier
 const increaseAfterX                = 1               // Increase after X
 const increaseBy                    = 1               // Multiply Bet By
-const pausePerBetMilliseconds       = 25              // Slow script in milliseconds
+const highTarget                    = 250             // High Count
+const pausePerBetMilliseconds       = 50              // Slow script in milliseconds
+
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 let targetIncrease                  = baseTarget             // + Add to Target
 let consecutiveLosses               = 0
-let endScript                       = 500              // End the script if we hit (X) consecutive losses
+let endScript                       = 250              // End the script if we hit (X) consecutive losses
 let bet                             = baseBet
 let target                          = baseTarget
 let lossStreak                      = 0
+let bigTarget                       = 0
 
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
@@ -21,16 +24,23 @@ while (true) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
             const { multiplier } = await this.bet(bet, target)
             await sleep(0)
+    if (multiplier > highTarget) { // under 1k counter
+            bigTarget = 0
+       }
+    if (multiplier < highTarget) { // under 1k counter
+            bigTarget +=1
+      }
 
     if (multiplier < target) { // loss
             consecutiveLosses++
             lossStreak++
-            await this.log(`Loss #${consecutiveLosses}`)
+            await this.log(`Loss #${consecutiveLosses} | < ${highTarget} - ${bigTarget}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
                 bet *= increaseBy
                 target += targetIncrease    
             }   
+ 
 
 if (consecutiveLosses >= endScript){
             lossStreak = 0
@@ -39,7 +49,7 @@ if (consecutiveLosses >= endScript){
             target = baseTarget
             await this.log(`Limit Reached | Restarting Script With ${baseBet/100} Bit(s).`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)} 
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5000)} 
         }
        
         
@@ -49,7 +59,7 @@ if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*5)}
             consecutiveLosses = 0
             bet = baseBet
             target = baseTarget
-            await this.log("Won Bet")
+            await this.log(` Won Bet | < ${highTarget} - ${bigTarget}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds)*2)} 
         }
