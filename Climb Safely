@@ -36,7 +36,7 @@ while (true) {
 
     if (multiplier < target) { // loss
             consecutiveLosses++
-            await this.log(`(${lossStreak}) | Loss #${consecutiveLosses} | ${highTarget} > ${lessTarget}`)
+            await this.log(`Loss #${consecutiveLosses} | ${highTarget} > ${lessTarget}`)
             console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
                 target += (baseTarget + lossStreak)    
