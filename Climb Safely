@@ -7,20 +7,19 @@ var config = {
 
 const baseBet                       = config.wager.value             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = config.target.value            // Starting Multiplier
-const increaseAfterX                = 1                             // Increase after X
-const pausePerBetMilliseconds       = config.speed.value              // Slow script in milliseconds
-const highTarget                    = 1000             // High Count
+const increaseAfterX                = 1                              // Increase after X
+const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
+const highTarget                    = 1000                           // High Count
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
-let targetIncrease                  = baseTarget             // + Add to Target
-let consecutiveLosses               = 0
-let endScript                       = config.length.value           // End the script if we hit (X) consecutive losses
-let scriptMulti                     = 1
+let targetIncrease                  = baseTarget                     // + Add to Target
+let endScript                       = config.length.value            // End the script if we hit (X) consecutive losses
 let bet                             = baseBet
 let target                          = baseTarget
 let betCount                        = 0
 let bigTarget                       = 0
+let consecutiveLosses               = 0
 
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
