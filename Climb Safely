@@ -1,59 +1,73 @@
 var config = {
   wager: { label: "Wager", type: "balance", value: 100 },
-  target: { label: "Target", type: "multiplier", value: 2.00 },
+  target: { label: "Target", type: "multiplier", value: 1.01 },
   speed: { label: "Speed", type: "number", value: 1 },
   length: { label: "Length", type: "number", value: 1000 } 
 };
 
 const baseBet                       = config.wager.value             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = config.target.value            // Starting Multiplier
-const increaseAfterX                = 1                              // Increase after X
-const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
-const highTarget                    = 1000                           // High Count
+const increaseAfterX                = 1                             // Increase after X
+const pausePerBetMilliseconds       = config.speed.value              // Slow script in milliseconds
+const highTarget                    = 1000             // High Count
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
-
+let targetIncrease                  = baseTarget             // + Add to Target
 let consecutiveLosses               = 0
-let endScript                       = config.length.value            // End the script if we hit (X) consecutive losses
+let endScript                       = config.length.value           // End the script if we hit (X) consecutive losses
+let scriptMulti                     = 1
 let bet                             = baseBet
 let target                          = baseTarget
-let lossStreak                      = 0
-let lessTarget                      = 0
+let betCount                        = 0
+let bigTarget                       = 0
+
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
 
+
 while (true) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
+
             const { multiplier } = await this.bet(bet, target)
             await sleep(0)
-    if (multiplier > highTarget) {
-            lessTarget = 0
-}
+   if (multiplier > highTarget) {
+            bigTarget = 0
+       }
     if (multiplier < highTarget) {
-            lessTarget +=1
-}
+            bigTarget +=1
+      }
 
     if (multiplier < target) { // loss
+            betCount++
             consecutiveLosses++
-            await this.log(`Loss #${consecutiveLosses} | ${highTarget} > ${lessTarget}`)
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+            await this.log(`(${betCount}) | Loss #${consecutiveLosses} | ${highTarget} > ${bigTarget}`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             if (consecutiveLosses % increaseAfterX === 0) {
-                target += (baseTarget + lossStreak)    
-}   
+                target += (targetIncrease)   
+            }   
 
-    if (consecutiveLosses >= endScript){
+if (consecutiveLosses >= endScript){
+            await this.stop()
+
+        }
+
+if (betCount >= (endScript)){
+            await this.newSeedPair()
+            betCount = 0
+        }
+               
+        } else { // win
+
+            if (target >= (endScript/2)) {
             await this.stop()
 }
-               
-} else { // win
-            await this.newSeedPair()
-            lossStreak = 0
+            betCount++
             consecutiveLosses = 0
             bet = baseBet
             target = baseTarget
-            await this.log(`(${lossStreak}) | Won Bet | ${highTarget} > ${lessTarget}`)
-            console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds))} 
+            await this.log(`(${betCount}) | Won Bet | ${highTarget} > ${bigTarget}`)
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+if (pausePerBetMilliseconds != 0){await sleep((pausePerBetMilliseconds))} 
         }
 }
