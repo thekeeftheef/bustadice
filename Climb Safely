@@ -7,16 +7,15 @@ var config = {
 
 const baseBet                       = config.wager.value             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = config.target.value            // Starting Multiplier
-const increaseAfterX                = 1               // Increase after X
-const pausePerBetMilliseconds       = config.speed.value              // Slow script in milliseconds
-const highTarget                    = 1000             // High Count
+const increaseAfterX                = 1                              // Increase after X
+const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
+const highTarget                    = 1000                           // High Count
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 let targetIncrease                  = baseTarget             // + Add to Target
 let consecutiveLosses               = 0
 let endScript                       = config.length.value           // End the script if we hit (X) consecutive losses
-let scriptMulti                     = 1
 let bet                             = baseBet
 let target                          = baseTarget
 let betCount                        = 0
@@ -30,7 +29,6 @@ while (true) {
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
 
             const { multiplier } = await this.bet(bet, target)
-            await sleep(0)
    if (multiplier > highTarget) {
             bigTarget = 0
        }
@@ -49,8 +47,7 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 if (consecutiveLosses >= endScript){
             await this.stop()
-
-        }
+             }
 
 if (betCount >= (endScript)/4){
             await this.newSeedPair()
@@ -58,7 +55,6 @@ if (betCount >= (endScript)/4){
         }
                
         } else { // win
-
             if (target >= (endScript/4)) {
             await this.stop()
 }
