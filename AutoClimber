@@ -10,8 +10,6 @@ const baseTarget                    = config.target.value            // Starting
 const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
 const increaseAfterX                = 1                              // Increase after X
 
-
-
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
 
 let targetIncrease                  = baseTarget                     // + Add to Target
@@ -29,9 +27,7 @@ let profit                          = 0
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
 
-
 while (true) {
-
     if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
 
             const { multiplier } = await this.bet(bet, target)
