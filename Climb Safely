@@ -1,25 +1,29 @@
 var config = {
   wager: { label: "Wager", type: "balance", value: 100 },
   target: { label: "Target", type: "multiplier", value: 1.01 },
-  speed: { label: "Speed", type: "number", value: 1 },
-  length: { label: "Length", type: "number", value: 1000 } 
+  length: { label: "Length", type: "number", value: 1000 },
+  stopper: { label: "Profit Stop", type: "number", value: 100},
+  speed: { label: "Speed", type: "number", value: 1 }
 };
 
 const baseBet                       = config.wager.value             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = config.target.value            // Starting Multiplier
-const increaseAfterX                = 1                              // Increase after X
 const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
-const highTarget                    = 1000                           // High Count
+const increaseAfterX                = 1                              // Increase after X
+
 
 
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
-let targetIncrease                  = baseTarget             // + Add to Target
-let consecutiveLosses               = 0
-let endScript                       = config.length.value           // End the script if we hit (X) consecutive losses
-let bet                             = baseBet
+
+let targetIncrease                  = baseTarget                     // + Add to Target
+let lossStreak                      = 0
+let endScript                       = config.length.value            // End the script if we hit (X) consecutive losses
+let bet                             = baseBet 
 let target                          = baseTarget
-let betCount                        = 0
+let seedCount                       = 0
 let bigTarget                       = 0
+let highTarget                      = ((config.length.value)*(config.target.value)).toFixed(0)            // High Count
+let profit                          = 0
 
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
@@ -37,32 +41,41 @@ while (true) {
       }
 
     if (multiplier < target) { // loss
-            betCount++
-            consecutiveLosses++
-            await this.log(`(${betCount}) | Loss #${consecutiveLosses} | ${highTarget} > ${bigTarget}`)
+            seedCount++
+            lossStreak++
+            profit -= (baseBet/100)
+            await this.log(`(${seedCount}) | Loss #${lossStreak} | ${highTarget} > ${bigTarget} | Profit: ${profit.toFixed(2)}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-            if (consecutiveLosses % increaseAfterX === 0) {
+
+            if (lossStreak % increaseAfterX === 0) {
                 target += (targetIncrease)   
             }   
 
-if (consecutiveLosses >= endScript){
-            await this.stop()
-             }
 
-if (betCount >= (endScript)/4){
-            await this.newSeedPair()
-            betCount = 0
-        }
                
-        } else { // win
-            if (target >= (endScript/4)) {
-            await this.stop()
-}
-            betCount++
-            consecutiveLosses = 0
+} else { // win
+            profit += (target - 1)
+            seedCount++
             bet = baseBet
             target = baseTarget
-            await this.log(`(${betCount}) | Won Bet | ${highTarget} > ${bigTarget}`)
+            lossStreak = 0
+
+await this.log(`(${seedCount}) | Won Bet | ${highTarget} > ${bigTarget} | Profit: ${profit.toFixed(2)}`)
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }
+
+if (lossStreak >= endScript){
+            await this.stop()
+}
+
+if (seedCount >= (endScript)/4){
+            await this.newSeedPair()
+            seedCount = 0
+}
+if (profit >= config.stopper.value) {
+            await this.resetStatistics()
+            await this.stop()
+
+}
+
 }
