@@ -74,7 +74,7 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             await this.stop()
 }
 
-if (seedCount >= (endScript)/4){
+if (seedCount >= (endScript)/2){
             await this.newSeedPair()
             seedCount = 0
 }
