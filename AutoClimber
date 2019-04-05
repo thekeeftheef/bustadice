@@ -34,7 +34,7 @@ while (true) {
 
     if (profit > config.stopper.value) {
             winStreak += 1
-            profit = 0
+            profit -= 100  
             endScript += 100
 
 }
@@ -74,12 +74,12 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             await this.stop()
 }
 
-if (seedCount >= (endScript)/2){
+if (seedCount >= (endScript)/4){
             await this.newSeedPair()
             seedCount = 0
 }
 
-if (winStreak > 4) {
+if (winStreak > 9) {
             await this.resetStatistics()
             await this.stop()
 }
