@@ -79,4 +79,8 @@ if (seedCount >= (endScript)/4){
             seedCount = 0
 }
 
+if (winStreak > 4) {
+            await this.resetStatistics()
+            await this.stop()
+}
 }
