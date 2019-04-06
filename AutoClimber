@@ -1,7 +1,8 @@
 var config = {
   wager: { label: "Wager", type: "balance", value: 100 },
   target: { label: "Target", type: "multiplier", value: 1.10 },
-  stopper: { label: "Profit Stop", type: "number", value: 100},
+  profit: { label: "Profit Stop", type: "number", value: 100},
+  depth: { label: "Depth", type: "number", value: 10},
   speed: { label: "Speed", type: "number", value: 1 }
 };
 
@@ -15,7 +16,7 @@ function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) 
 let targetIncrease                  = baseTarget                     // + Add to Target
 let lossStreak                      = 0
 let winStreak                       = 0
-let endScript                       = (baseTarget - 1) * 10000                    // End the script if we hit (X) consecutive losses
+let endScript                       = (baseTarget - 1) * (config.profit.value.toFixed(0) * 100)                    // End the script if we hit (X) consecutive losses
 let bet                             = baseBet 
 let target                          = baseTarget
 let seedCount                       = 0
@@ -32,10 +33,10 @@ while (true) {
 
             const { multiplier } = await this.bet(bet, target)
 
-    if (profit > config.stopper.value) {
+    if (profit > config.profit.value) {
             winStreak += 1
-            profit -= 100  
-            endScript += 100
+            profit -= config.profit.value  
+            endScript += config.profit.value
 
 }
              
@@ -59,7 +60,7 @@ console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 }   
                
 } else { // win
-            profit += (target - 1)
+            profit += (target - 1)*((baseBet/100))
             seedCount++
             bet = baseBet
             target = baseTarget + (winStreak * 0.01)
@@ -79,8 +80,7 @@ if (seedCount >= (endScript)/4){
             seedCount = 0
 }
 
-if (winStreak > 9) {
-            await this.resetStatistics()
+if (winStreak > (config.depth.value - 1)) {
             await this.stop()
 }
 }
