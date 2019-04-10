@@ -1,6 +1,6 @@
 var config = {
   wager: { label: "Wager", type: "balance", value: 100 },
-  target: { label: "Target", type: "multiplier", value: 1.10 },
+  target: { label: "Target", type: "multiplier", value: 1.01 },
   profit: { label: "Profit Stop", type: "number", value: 100},
   depth: { label: "Depth", type: "number", value: 10},
   speed: { label: "Speed", type: "number", value: 1 }
@@ -18,7 +18,7 @@ let target                          = baseTarget
 let profit                          = 0
 let lossStreak                      = 0
 let winStreak                       = 0
-let endScript                       = (baseTarget - 1) * (config.profit.value.toFixed(0) * 100)                // End the script if we hit (X) consecutive losses
+let endScript                       = (baseTarget - 1) * (config.profit.value.toFixed(0) * 1000)                // End the script if we hit (X) consecutive losses
 let curRoll                         = ((endScript) * (baseTarget + (winStreak * 0.01))).toFixed(0) 
 let rollCount                       = 0
 let seedCount                       = 0
@@ -37,7 +37,7 @@ while (true) {
      if (profit > config.profit.value) {
             winStreak += 1
             profit -= config.profit.value  
-            endScript += config.profit.value
+            endScript += (config.profit.value * 0.8)
 }
 
 
@@ -70,8 +70,6 @@ while (true) {
                 target += (baseTarget)   
 
 }   
-
-
 
                
 } else { // win
