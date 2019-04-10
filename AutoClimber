@@ -37,7 +37,7 @@ while (true) {
      if (profit > config.profit.value) {
             winStreak += 1
             profit -= config.profit.value  
-            endScript += (config.profit.value * 0.8)
+            endScript += (config.profit.value * 0.5)
 }
 
 
