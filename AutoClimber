@@ -26,8 +26,6 @@ let seedReset                       = ((endScript)/4).toFixed(0)
 
 
 
-
-
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
 
 while (true) {
