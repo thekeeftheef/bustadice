@@ -97,4 +97,4 @@ while (true) {
 await this.log(`Won | ${seedCount} : ${seedReset} | ${endScript.toFixed(0)} > ${rollCount} | Profit: ${profit.toFixed(2)} | ${winStreak} : ${levelTwo} : ${levelThree}`)
 }
 
-}0
+}
