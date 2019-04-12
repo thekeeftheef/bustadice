@@ -1,100 +1,99 @@
 var config = {
-  wager: { label: "Wager", type: "balance", value: 100 },
-  target: { label: "Target", type: "multiplier", value: 1.01 },
-  profit: { label: "Profit Stop", type: "number", value: 100},
-  depth: { label: "Depth", type: "number", value: 10},
-  speed: { label: "Speed", type: "number", value: 1 }
+   wager: { label: "Wager", type: "balance", value: 100 },
+   target: { label: "Target", type: "multiplier", value: 1.1},
+   length: {label: "Length", type: "number", value: 1000},
+   speed: { label: "Speed", type: "number", value: 1}
 };
+
 
 const baseBet                       = config.wager.value             // Starting Bet in Satoshi (100 satoshi = 1 bit)
 const baseTarget                    = config.target.value            // Starting Multiplier
 const pausePerBetMilliseconds       = config.speed.value             // Slow script in milliseconds
 const increaseAfterX                = 1                              // Increase after X
 
+
 function sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)) }
+
 
 let bet                             = baseBet 
 let target                          = baseTarget
 let profit                          = 0
 let lossStreak                      = 0
-let winStreak                       = 0
-let endScript                       = 2000                // End the script if we hit (X) consecutive losses
+let levelOne                        = 0
+let levelTwo                        = 0
+let levelThree                      = 0 
+let endScript                       = config.length.value                // End the script if we hit (X) consecutive losses
 let curRoll                         = endScript 
 let rollCount                       = 0
 let seedCount                       = 0
 let seedReset                       = ((endScript)/4).toFixed(0)
-let levelTwo                        = 0
-let levelThree                      = 0 
+
 
 
 
 this.log(`Beginning Script With ${baseBet/100} Bit(s).`)
 
 while (true) {
-
      if (pausePerBetMilliseconds != 0){await sleep(pausePerBetMilliseconds)} 
-
-            const { multiplier } = await this.bet(bet, target)              // Bet
-
-     if (profit > config.profit.value) {
-            winStreak += 1
-            profit -= config.profit.value  
-            endScript += (config.profit.value * 0.5)
-}
-
-
+            const { multiplier } = await this.bet(bet, target)                        // Bet
+            
     if (lossStreak >= endScript){
             await this.stop()
 }
+
     if (seedCount >= seedReset){
             await this.newSeedPair()
             seedCount = 0
 }
 
-    if (winStreak > (config.depth.value - 1)) {
-            winStreak = 0
+     if (profit >= 10) {
+            levelOne++
+            profit -= 10  
+            endScript += (config.length.value * 0.5)
+}
+
+    if (levelOne >= 10) {
+            levelOne = 0
             levelTwo++
             bet = baseBet
-            target = baseTarget + (winStreak * 0.01)
+            target = baseTarget + (levelOne * 0.1)
           
 }    
-     if (levelTwo > 9) {
+     if (levelTwo >= 10) {
             levelTwo = 0
             levelThree++
 }
 
-    if (levelThree > 0) {
+    if (levelThree = 1) {
            await this.stop()
 }
-
              
     if (multiplier > curRoll) {
-            rollCount = 0
-}
-    if (multiplier < curRoll) {
+            rollCount = 0;
+    } else{
+       (multiplier < curRoll) {
             rollCount++
 }
+
 
     if (multiplier < target) { // loss
             seedCount++
             lossStreak++
             profit -= (baseBet/100)
-            await this.log(`Loss ${lossStreak} | ${seedCount} : ${seedReset} | ${endScript.toFixed(0)} > ${rollCount} | Profit: ${profit.toFixed(2)} | ${winStreak} : ${levelTwo} : ${levelThree}`)
+            await this.log(`Loss ${lossStreak} | ${seedCount} : ${seedReset} | ${endScript.toFixed(0)} > ${rollCount} | Profit: ${profit.toFixed(2)} | ${levelThree} : ${levelTwo} : ${levelOne}`)
 
    if (lossStreak % increaseAfterX === 0) {
                 target += (baseTarget)   
-
 }   
-
                
-} else { // win
-            profit += (target - 1)*((baseBet/100))
+}  else { // win
+            profit += ((target - 1)*(baseBet/100))
             seedCount++
             bet = baseBet
-            target = baseTarget + (winStreak * 0.01)
+            target = baseTarget + (winStreak * 0.1)
             lossStreak = 0
 
-await this.log(`Won | ${seedCount} : ${seedReset} | ${endScript.toFixed(0)} > ${rollCount} | Profit: ${profit.toFixed(2)} | ${winStreak} : ${levelTwo} : ${levelThree}`)
+await this.log(`Won | ${seedCount} : ${seedReset} | ${endScript.toFixed(0)} > ${rollCount} | Profit: ${profit.toFixed(2)} | ${levelThree} : ${levelTwo} : ${levelOne}`)
 }
 
 }
