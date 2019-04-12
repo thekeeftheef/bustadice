@@ -1,7 +1,7 @@
 var config = {
    wager: { label: "Wager", type: "balance", value: 100 },
    target: { label: "Target", type: "multiplier", value: 1.1},
-   length: {label: "Length", type: "number", value: 1000},
+   length: { label: "Length", type: "number", value: 1000},
    speed: { label: "Speed", type: "number", value: 1}
 };
 
@@ -68,10 +68,9 @@ while (true) {
            await this.stop()
 }
              
-    if (multiplier > curRoll) {
+    if (multiplier >= curRoll) {
             rollCount = 0;
-    } else{
-       (multiplier < curRoll) {
+    } else {
             rollCount++
 }
 
